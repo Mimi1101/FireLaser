@@ -8,6 +8,7 @@ class DSlaser():
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         # Connect to the server
         self.client_socket.connect((SERVER_ADDRESS, SERVER_PORT))
+        print("Connection established!")
         return self.client_socket
 
     def start_countdown(self):
@@ -48,6 +49,7 @@ class DSlaser():
         """
         For COUNTDOWN_DECREMENT
         """
+        
         while countdown_number>0:
             next_countdown_number = countdown_number -1
             message_code = '0200'
@@ -67,11 +69,33 @@ class DSlaser():
             if len(response_bytes) < 8 :
                 print("Malformed response buddy, must be 8 bytes.")
                 break
-
             
+            #Parsing the response now
+            response_message_code = response_bytes[0:2].decode('utf-8')
+            response_code = response_bytes[2:4].decode('utf-8')
+            countdown = response_bytes[4:8].decode('utf-8')
+            countdown_value = int(countdown, 16)
 
+            print(f"Response message code: {response_message_code}, Response code: {response_code}")
+            print(f"Countdown value sent by server: {countdown_value}")
 
+            if response_code == '00':
+                print("Sucess, countdown decremented!")
+            else:
+                print("Erorr in decrementing the value")
+                break
             
+            # Updating the countdown_number for the next iteration
+            countdown_number = countdown_value
+
+            # Check if countdown has reached zero
+            if countdown_number == 0:
+                print("Countdown has reached zero!")
+                break
+        
+
+
+                     
             
 
 
@@ -80,4 +104,5 @@ if __name__ == '__main__':
     dslaser_client = DSlaser()
     dslaser_client.create_client()
     starting_count = dslaser_client.start_countdown()
+    decremnting_count = dslaser_client.decrement_countdown(starting_count)
   
