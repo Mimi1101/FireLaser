@@ -33,8 +33,7 @@ class DSlaser():
         response_code = response_bytes[2:4].decode('utf-8')
         print(f"Response message code: {response_message_code}, Response code: {response_code}")
 
-        if response_code == '00':  # Expected success code
-            # Next 4 bytes are the countdown value as a big-endian integer
+        if response_code == '00': 
             countdown_bytes = response_bytes[4:8].decode('utf-8')
             countdown = int(countdown_bytes, 16)
             print(f"Countdown initiated successfully. Countdown value: {countdown}")
