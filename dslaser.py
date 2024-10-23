@@ -11,7 +11,9 @@ class DSlaser():
         return self.client_socket
 
     def start_countdown(self):
-        
+        """
+        For COUNTDOWN_INCREMENT
+        """
         message = '0100'
         print("Sending countdown increment!")
         
@@ -43,6 +45,9 @@ class DSlaser():
             return None
         
     def decrement_countdown(self, countdown_number):
+        """
+        For COUNTDOWN_DECREMENT
+        """
         while countdown_number>0:
             next_countdown_number = countdown_number -1
             message_code = '0200'
@@ -56,6 +61,13 @@ class DSlaser():
 
             #Receiving the response
             response_bytes = self.client_socket.recv(1024)
+            print(f"Got the response! {response_bytes}")
+
+            #Ensuring the response is at least 8 bytes
+            if len(response_bytes) < 8 :
+                print("Malformed response buddy, must be 8 bytes.")
+                break
+
             
 
 
