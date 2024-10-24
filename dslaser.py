@@ -49,7 +49,7 @@ class DSlaser():
         """
         For COUNTDOWN_DECREMENT
         """
-        
+
         while countdown_number>0:
             next_countdown_number = countdown_number -1
             message_code = '0200'
@@ -91,7 +91,28 @@ class DSlaser():
             # Check if countdown has reached zero
             if countdown_number == 0:
                 print("Countdown has reached zero!")
-                break
+                return countdown_number
+
+    def fire_laser(self, countdown_value):
+         if(countdown_value == 0):
+            message = '0300'
+
+            # Sending the instruction to fire the laser as UTF-8 encoded string
+            message_bytes = message.encode('utf-8')
+            self.client_socket.send(message_bytes)
+
+            # Receive the response
+            response_bytes = self.client_socket.recv(1024)
+            print(f"Received response: {response_bytes}")
+
+            
+
+
+
+
+             
+             
+    
         
 
 
@@ -105,4 +126,5 @@ if __name__ == '__main__':
     dslaser_client.create_client()
     starting_count = dslaser_client.start_countdown()
     decremnting_count = dslaser_client.decrement_countdown(starting_count)
+    dslaser_client.fire_laser(decremnting_count)
   
